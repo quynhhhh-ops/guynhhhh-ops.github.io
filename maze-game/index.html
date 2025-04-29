@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maze</title>
+    <style>
+        html,
+        body {
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #container {
+            position: relative;
+            width: 90vw;
+            height: 100vh;
+            margin: 0 auto;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .chest-link {
+            position: absolute;
+            display: block;
+            pointer-events: auto;
+        }
+
+        .chest-link img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <body>
+        <header>
+            <h1>the maze</h1>
+            <h3>in here, we go on a journey to discover the Tay ethnical minority</h3>
+            <b>use your cursor to follow the maze, collect the chests for a key to the ultimate discovery</b>
+        </header>
+    <div id="container">
+        <canvas id="myCanvas"></canvas>
+
+        <!-- Chest 1 -->
+        <a class="chest-link" id="chest1" href="chest1.html">
+            <img src="images/chest.png" alt="Chest 1" />
+        </a>
+
+        <!-- Chest 2 -->
+        <a class="chest-link" id="chest2" href="chest2.html">
+            <img src="images/chest.png" alt="Chest 2" />
+        </a>
+
+        <!-- Chest 3 -->
+        <a class="chest-link" id="chest3" href="chest3.html">
+            <img src="images/chest.png" alt="Chest 3" />
+        </a>
+
+        <!-- Chest 4 -->
+        <a class="chest-link" id="chest4" href="chest4.html">
+            <img src="images/chest.png" alt="Chest 4" />
+        </a>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('container');
+        const mazeImg = new Image();
+        mazeImg.src = 'images/maze.png';
+
+        const chests = [
+            { el: document.getElementById('chest1'), xPercent: 0.485, yPercent: 0.24 },
+            { el: document.getElementById('chest2'), xPercent: 0.625, yPercent: 0.5 },
+            { el: document.getElementById('chest3'), xPercent: 0.864, yPercent: 0.411 },
+            { el: document.getElementById('chest4'), xPercent: 1.005, yPercent: 0.58 }
+        ];
+
+        mazeImg.onload = () => {
+            resizeCanvasAndDraw();
+        };
+
+        function resizeCanvasAndDraw() {
+            const rect = container.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+
+            // Draw maze
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(mazeImg, 0, 0, canvas.width, canvas.height);
+
+            // Resize & reposition each chest
+            chests.forEach(({ el, xPercent, yPercent }) => {
+                const chestWidth = canvas.width * 0.03;
+                const chestX = canvas.width * xPercent;
+                const chestY = canvas.height * yPercent;
+
+                el.style.width = `${chestWidth}px`;
+                el.style.left = `${chestX}px`;
+                el.style.top = `${chestY}px`;
+            });
+        }
+
+        window.addEventListener('resize', resizeCanvasAndDraw);
+
+        // Optional: pixel detection effect
+        canvas.addEventListener('mousemove', function (e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const pixel = ctx.getImageData(x, y, 1, 1).data;
+            document.body.style.backgroundColor = pixel[3] > 0 ? '#d2b48c' : 'white';
+        });
+    </script>
+</body>
+
+</html>
